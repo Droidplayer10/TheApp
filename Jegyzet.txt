@@ -8,3 +8,44 @@ color palettes:
 Backgroundcolor: #E2EAF3
 Button(example: login): #494F88
 Button(example: logout):#CCDCE9
+
+const express = require('express')
+const mysql = require('mysql')
+const app = express()
+const port = 3000
+var connection 
+function Kapcsolat (){
+  connection  = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'app'
+  })
+  connection.connect()
+}
+app.use(express.static('kepek'))
+app.use(express.json())
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+//------------------------     Autó lekérdezése
+app.get('/jobofstudent', (req, res) => {
+  Kapcsolat();
+  const query = `
+    SELECT attendance.attendance_student_id, jobs.job_name,jobs.job_location,jobs.job_start_time,jobs.job_end_time
+    FROM attendance
+    INNER JOIN jobs ON attendance.attendance_job_id = jobs.job_id
+  `;
+  connection.query(query, (err, rows, fields) => {
+    if (err) throw err;
+    res.send(rows);
+  });
+  connection.end();
+});
+
+
+
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
