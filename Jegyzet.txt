@@ -1,0 +1,10 @@
+color palettes:
+#E2EAF3
+#CCDCE9
+#494F88
+1F255E
+#2F73FE
+
+Backgroundcolor: #E2EAF3
+Button(example: login): #494F88
+Button(example: logout):#CCDCE9
