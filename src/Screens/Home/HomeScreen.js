@@ -2,26 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View,Modal,TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList } from 'react-native-gesture-handler';
+import Moment from 'moment';
+
+
 
 import ItemView from './JobsofStudent';
+import JobsofStudent from './JobsofStudent';
 
 
 
 const Home=()=> {
-  const nextExamDate = '2023.05.03 14:00';
-  const currentTime = new Date().toLocaleTimeString();
+  
   const [ jobsofStudent, setJobsofStudent] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
   const [activeModalId, setActiveModalId] = useState(null);
+ 
+
 
   useEffect(()=>{
-    fetch('http://192.168.1.121:3000/jobofstudent')
+    fetch('http://192.168.6.8:3000/jobofstudent')
     .then((response) => response.text())
     .then((responseJson)=>{
       try {
         const response = JSON.parse(responseJson);
         setJobsofStudent(response);
-        console.log('sikeres');
+        
       } catch (error) {
         console.log(error);
       }
@@ -43,9 +48,10 @@ const ItemSeparatorView = () => {
     />
   );
 };
-
+//<JobsofStudent  />
 
 const ItemView = ({ item }) => {
+  var date = new Date("2016-01-04 10:34:23");
   
 
   return (
@@ -58,7 +64,7 @@ const ItemView = ({ item }) => {
       >
         <View style={styles.examContainer}>
         <Ionicons name="calendar" size={24} color="black" />
-        <Text>{item.job_start_time}</Text>
+        <Text>{date}</Text>
         <Text>{item.job_end_time}</Text>
       </View>
       
@@ -76,7 +82,7 @@ const ItemView = ({ item }) => {
       </TouchableOpacity>
       
       <Text>{item.job_location}</Text>
-        <Text>{item.job_start_time}</Text>
+        <Text>{localTime}</Text>
         <Text>{item.job_end_time}</Text>
 
       <Modal

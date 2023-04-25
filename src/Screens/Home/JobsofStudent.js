@@ -11,8 +11,7 @@ import {
 import { useState } from 'react';
 
   export default ItemView = ({ item }) => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [ActiveModalId, setActiveModalId] = useState(null);
+    const { modalVisible, activeModalId  } = props;
   
     return (
         <View>
