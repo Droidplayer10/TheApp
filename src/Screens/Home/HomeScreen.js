@@ -2,14 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View,Modal,TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FlatList } from 'react-native-gesture-handler';
-import Moment from 'moment';
 
-
-
-import ItemView from './JobsofStudent';
-import JobsofStudent from './JobsofStudent';
-
-
+import ItemView from './ItemView';
 
 const Home=()=> {
   
@@ -17,10 +11,8 @@ const Home=()=> {
   const [modalVisible, setModalVisible] = useState(false);
   const [activeModalId, setActiveModalId] = useState(null);
  
-
-
   useEffect(()=>{
-    fetch('http://192.168.6.8:3000/jobofstudent')
+    fetch('http://192.168.1.121:3000/jobofstudent')
     .then((response) => response.text())
     .then((responseJson)=>{
       try {
@@ -45,74 +37,47 @@ const ItemSeparatorView = () => {
         width: '100%',
         backgroundColor: '#C8C8C8',
       }}
+      
     />
   );
 };
-//<JobsofStudent  />
 
-const ItemView = ({ item }) => {
-  var date = new Date("2016-01-04 10:34:23");
-  
-
-  return (
-    <View>
-      <TouchableOpacity
-        onPress={() => {
-          setActiveModalId(item.attendance_student_id);
-          setModalVisible(true);
-        }}
-      >
-        <View style={styles.examContainer}>
-        <Ionicons name="calendar" size={24} color="black" />
-        <Text>{date}</Text>
-        <Text>{item.job_end_time}</Text>
-      </View>
-      
-      
-      
-        <Text>{item.attendance_student_id}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          setActiveModalId(item.attendance_student_id);
-          setModalVisible(true);
-        }}
-      >
-        <Text>{item.job_name}</Text>
-      </TouchableOpacity>
-      
-      <Text>{item.job_location}</Text>
-        <Text>{localTime}</Text>
-        <Text>{item.job_end_time}</Text>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={activeModalId === item.attendance_student_id && modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-          setActiveModalId(null);
-        }}
-      >
-        <View style={styles.modalContainer}>
-          <Text>{item.attendance_student_id}</Text>
-        </View>
-      </Modal>
-    </View>
-  );
+const closeModal = () => {
+  setModalVisible(false);
+  setActiveModalId(null);
+}
+const openModal = (studentId) => {
+  setModalVisible(true);
+  setActiveModalId(studentId);
 };
+
+
 
   return (
     <View style={styles.container}>
-      
+      <View style={styles.header} >
+
+
+      </View>
+
+      <View style={styles.footer} >
+
       <FlatList
           data={jobsofStudent}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={ItemSeparatorView}
-          renderItem={ItemView}
-      
-      
+          renderItem={({ item }) => <ItemView
+            item={item}
+            modalVisible={modalVisible}
+            setActiveModalId={setActiveModalId}
+            closeModal={closeModal}
+            openModal={() => openModal(item.attendance_student_id)}
+            />}
       />
+
+      </View>
+     
+      
     </View>
   );
   }
@@ -126,7 +91,19 @@ const ItemView = ({ item }) => {
       justifyContent: 'center',
     },
     examContainer:{
-      flexDirection:'row'
+      flexDirection:'column',
+      justifyContent:'space-evenly',
+    },
+    header: {
+      flex:1
+    },
+    footer: {
+      flex:1,
+      backgroundColor: '#2F73FE',
+      borderBottomStartRadius: 150,
+      borderBottomEndRadius: 150,
+      borderTopRightRadius:130,
+      borderTopLeftRadius:130,
     }
   });
   

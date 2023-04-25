@@ -10,7 +10,14 @@ import MainButton from '../../components/MainButton/MainButton';
 const Splash = ({navigation}) => {
  
 
-
+  const bounceInDown = {
+    from: {
+      opacity: -20,
+    },
+    to: {
+      opacity: 1,
+    },
+  };
 
   return (
 
@@ -33,8 +40,10 @@ resizeMode={"cover"}
 
 <View style={styles.middle}>
 
- <Text>HELLO!</Text>
-
+ <Text style={styles.Title}>Üdvözlünk!</Text>
+ <Text></Text>
+<Animatable.Text animation={bounceInDown} duration={1000} style={styles.text}>Megújultunk!</Animatable.Text>
+<Animatable.Text animation={bounceInDown} duration={1000} style={styles.text}>Minden egy helyen!</Animatable.Text>
 
 </View>
 
@@ -65,12 +74,8 @@ const styles = StyleSheet.create({
   
   container: {
    flex: 1,
-   justifyContent: 'center',
-   
-    
+   justifyContent: 'center',  
     backgroundColor: "#E2EAF3",
-  
-    
   },
   header:{
     flex:0.5,
@@ -78,10 +83,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   middle:{
-flex: 0.5,
+flex: 0.4,
 alignItems:'center',
-borderTopLeftRadius: 40,
-borderTopRightRadius: 40,
+borderTopLeftRadius: 100,
+borderTopRightRadius: 100,
 backgroundColor:"#fff"
 
   },
@@ -93,18 +98,15 @@ backgroundColor:"#fff"
   Title:{
     fontWeight:'bold',
     color: '#146C94',
-    fontSize: 20
+    fontSize: 50
   },
   footer:{
     flex:0.1,
     backgroundColor: 'white',
-  
-
   },
   alternativeLayoutButtonContainer: {
-    
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center'
     
     
@@ -125,6 +127,11 @@ backgroundColor:"#fff"
     color: 'white',
     fontWeight:'bold'
     
+  },
+  text:{
+    fontSize:30,
+    fontWeight:'500',
+    color:'grey'
   },
 
  
