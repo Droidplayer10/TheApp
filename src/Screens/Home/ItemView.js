@@ -6,31 +6,33 @@ import {
   Modal,StyleSheet
 } from 'react-native';
 
+
+
 const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
 
   const formattedStartTime = new Date(item.job_start_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short' });
   const formattedEndTime = new Date(item.job_end_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short' });
 
   return (
-    <View style={styles.ItemView} >
-      
+    <View style={styles.container}>
+      <View style={styles.ItemView} >
         <Text style={styles.title}>{item.job_name}</Text>
         
-        <View style={{alignItems:'center'}} >
         <TouchableOpacity onPress={openModal}>
+          <Text style={styles.joboftext}>Munkaidő kezdete:</Text>
+         <Text style={styles.joboftext}>{'\t\t\t\t\t'+formattedStartTime}</Text> 
+          <Text style={styles.joboftext}>Munkaidő vége: </Text>
+          <Text style={styles.joboftext}>{'\t\t\t\t\t'+formattedEndTime}</Text>
+          <Text style={styles.joboftext}>Helyszín: </Text>
+        </TouchableOpacity>
         
-      </TouchableOpacity>
-      <TouchableOpacity onPress={closeModal}>
-        <Text>Munkaidő kezdete:</Text>
-        <Text style={styles.text}>{'\t\t\t\t'+formattedStartTime}</Text>
-        <Text>Munkaidő vége:</Text>
-        <Text>{'\t\t\t\t'+formattedEndTime}</Text>
-        <Text>{item.attendance_student_id}</Text>
-      </TouchableOpacity>
+        <Text style={styles.joboftext}>{'\t\t\t\t\t'+item.job_location}</Text>
+      </View>
       
-      <Text>{item.job_location}</Text>
-    <Text></Text>
-
+      <View style={styles.counter}>
+  <View style={styles.counterBackground} />
+  <Text style={styles.text}>Munka kezdésig:</Text>
+</View>
 
       <Modal
         animationType="slide"
@@ -38,53 +40,82 @@ const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
         visible={modalVisible}
         onRequestClose={closeModal}
       >
-        
-          <Text>{item.attendance_student_id}</Text>
-        
+        <TouchableOpacity style={styles.modalBox} onPress={closeModal}>
+          <Text style={styles.text}>{item.attendance_student_id}</Text>
+        </TouchableOpacity>
       </Modal>
-      
-      </View>
-      <View style={styles.counter} >
-      <Text>Munka kezdésig: </Text>
-    </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-    title: {
-      fontSize: 25,
-      fontWeight:'bold'
-    },
-    ItemView:{
-      flex:1,
-      flexDirection:'column',
-      justifyContent:'center',
-      alignItems:'center',
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  ItemView: {
+    alignItems: 'flex-start',
+    backgroundColor: '#2F73FE',
+    width: '95%',
     
-
-      backgroundColor:'#2F73FE',
-      width: '100%',
-      height:'100%',
-      borderTopLeftRadius:10,
-      borderRadius:50
+    borderRadius: 30,
+    paddingVertical: '20%',
+    paddingHorizontal: 10,
     
-    },
-    counter:{
-      justifyContent:'center',
-      backgroundColor:'#fff',
-      borderTopLeftRadius:20,
-      borderTopRightRadius:20,
-      alignItems:'center',
-      width:'80%',
-      height:'20%',
-      
-      
-      
-      
-    },
-    text:{
-      fontSize: 20
-    },
+  },
+ counter: {
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: 'flex-start',
+    width: '80%',
+    height: '15%',
+    position: 'absolute',
+  bottom: 0,
+    overflow: 'hidden',
+    paddingBottom: 0,
+    backgroundImage: 'linear-gradient(to bottom, transparent 0%, #fff 100%)',
+  },
+  counterBackground: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '10%',
+    backgroundColor: '#FFF',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+  },
+  title: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#fff',
+    
+    alignSelf:'center'
+  },
+  text: {
+    fontSize: 20,
+    color: '#2F73FE',
+    marginVertical: 5,
+  },
+  joboftext:{
+    fontSize: 20,
+    color: '#fff',
+  },
+  modalBox: {
+    position: 'absolute',
+    top: '50%',
+    left: '90%',
+    backgroundColor: '#fff',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    transform: [{ translateY: -20 }, { translateX: -80 }],
+  },
+});
 
-  });
 export default ItemView;
