@@ -12,7 +12,7 @@ const Home=()=> {
   const [activeModalId, setActiveModalId] = useState(null);
  
   useEffect(()=>{
-    fetch('http://192.168.1.121:3000/jobofstudent')
+    fetch('http://192.168.6.8:3000/jobofstudent')
     .then((response) => response.text())
     .then((responseJson)=>{
       try {
@@ -56,26 +56,27 @@ const openModal = (studentId) => {
   return (
     <View style={styles.container}>
       <View style={styles.header} >
-
+<Text>Hello</Text>
 
       </View>
 
-      <View style={styles.footer} >
+     <View style={styles.footer} >
 
       <FlatList
           data={jobsofStudent}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={ItemSeparatorView}
-          renderItem={({ item }) => <ItemView
+          renderItem={({ item }) =>
+          <ItemView
             item={item}
             modalVisible={modalVisible}
             setActiveModalId={setActiveModalId}
             closeModal={closeModal}
             openModal={() => openModal(item.attendance_student_id)}
-            />}
+          />}
       />
 
-      </View>
+</View>
      
       
     </View>
@@ -90,20 +91,18 @@ const openModal = (studentId) => {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    examContainer:{
-      flexDirection:'column',
-      justifyContent:'space-evenly',
-    },
+  
     header: {
-      flex:1
+      flex:0.5,
+      flexDirection:'row'
     },
     footer: {
       flex:1,
-      backgroundColor: '#2F73FE',
-      borderBottomStartRadius: 150,
-      borderBottomEndRadius: 150,
-      borderTopRightRadius:130,
-      borderTopLeftRadius:130,
+      flexDirection:'row',
+      justifyContent:'center',
+      alignItems:'center',
+      backgroundColor: 'red',
+   
     }
   });
   

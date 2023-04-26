@@ -12,30 +12,41 @@ const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
   const formattedEndTime = new Date(item.job_end_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short' });
 
   return (
-    <View>
+    <View style={styles.ItemView} >
+      
         <Text style={styles.title}>{item.job_name}</Text>
+        
+        <View style={{alignItems:'center'}} >
         <TouchableOpacity onPress={openModal}>
         
       </TouchableOpacity>
       <TouchableOpacity onPress={closeModal}>
         <Text>Munkaidő kezdete:</Text>
-        <Text>{'\t\t\t\t'+formattedStartTime}</Text>
+        <Text style={styles.text}>{'\t\t\t\t'+formattedStartTime}</Text>
         <Text>Munkaidő vége:</Text>
         <Text>{'\t\t\t\t'+formattedEndTime}</Text>
         <Text>{item.attendance_student_id}</Text>
       </TouchableOpacity>
       
       <Text>{item.job_location}</Text>
+    <Text></Text>
+
+
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={closeModal}
       >
-        <View>
+        
           <Text>{item.attendance_student_id}</Text>
-        </View>
+        
       </Modal>
+      
+      </View>
+      <View style={styles.counter} >
+      <Text>Munka kezdésig: </Text>
+    </View>
     </View>
   );
 };
@@ -44,5 +55,36 @@ const styles = StyleSheet.create({
       fontSize: 25,
       fontWeight:'bold'
     },
+    ItemView:{
+      flex:1,
+      flexDirection:'column',
+      justifyContent:'center',
+      alignItems:'center',
+    
+
+      backgroundColor:'#2F73FE',
+      width: '100%',
+      height:'100%',
+      borderTopLeftRadius:10,
+      borderRadius:50
+    
+    },
+    counter:{
+      justifyContent:'center',
+      backgroundColor:'#fff',
+      borderTopLeftRadius:20,
+      borderTopRightRadius:20,
+      alignItems:'center',
+      width:'80%',
+      height:'20%',
+      
+      
+      
+      
+    },
+    text:{
+      fontSize: 20
+    },
+
   });
 export default ItemView;
