@@ -12,7 +12,7 @@ const Home=()=> {
   const [activeModalId, setActiveModalId] = useState(null);
  
   useEffect(()=>{
-    fetch('http://192.168.1.121:3000/jobofstudent')
+    fetch('http://192.168.6.8:3000/jobofstudent')
     .then((response) => response.text())
     .then((responseJson)=>{
       try {

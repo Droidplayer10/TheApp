@@ -27,7 +27,12 @@ const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
         </TouchableOpacity>
         
         <Text style={styles.joboftext}>{'\t\t\t\t\t'+item.job_location}</Text>
+        <Text></Text>
+        <TouchableOpacity style={{alignSelf:'flex-end',}}>
+        <Text style={{fontSize:20, fontFamily:'sans-serif-medium'}}>Jelenléti ív</Text>
+      </TouchableOpacity>
       </View>
+      
       
       <View style={styles.counter}>
   <View style={styles.counterBackground} />
