@@ -1,16 +1,25 @@
-import React from 'react';
+
 import {
   View,
   Text,
   TouchableOpacity,
-  Modal,StyleSheet
+  Modal,StyleSheet,Image
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Signature_canvas from 'react-native-signature-canvas';
+import Signature from './Signature'
+import React, { useState } from 'react';
+
+
+
 
 
 
 const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
+  const [signature, setSignature] = useState("");
+  const [showSignatureCanvas, setShowSignatureCanvas] = useState(false);
+
 
   const formattedStartTime = new Date(item.job_start_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short' });
   const formattedEndTime = new Date(item.job_end_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short' });
@@ -34,6 +43,10 @@ const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
           
         <Text style={{fontSize:20, fontFamily:'sans-serif-medium'}}>Jelenléti ív</Text>
       </TouchableOpacity>
+
+
+
+
       </View>
       
       
@@ -48,15 +61,18 @@ const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
         visible={modalVisible}
         onRequestClose={closeModal}
       >
-          {/* -----MODAL ABLAK------- */}
+          {/* -----MODAL CONTENT------- */}
 
-          <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Jelenléti ív</Text>
+          <View style={styles.modalView}>   
+              <Image style={styles.tinyLogo}
+              source={{
+                uri:'http://192.168.1.121:3000/'+item.job_attendance_sheet
+                }}  />
+ 
+<Signature />
 
-          </View>
 
-
-          <TouchableOpacity
+<TouchableOpacity
                 style={styles.CloseModalButton}
                 onPress={closeModal}
               >
@@ -65,6 +81,19 @@ const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
                 <Text style={styles.CloseModalText}>X</Text>
 
               </TouchableOpacity>
+
+<View>
+
+
+  
+</View>
+
+
+          </View>
+         
+          
+
+        
       </Modal>
     </View>
   );
@@ -85,6 +114,11 @@ const styles = StyleSheet.create({
     paddingVertical: '10%',
     paddingHorizontal: '5%',
     
+  },
+  tinyLogo: {
+    width: '100%',
+    height: '70%',
+    resizeMode: 'stretch'
   },
  counter: {
     justifyContent: 'center',
@@ -135,8 +169,8 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   modalView: {
-    height: 700,
-    width: 380,
+    height: '95%',
+    width: '95%',
     margin: 15,
     backgroundColor: "white",
     borderRadius: 50,
@@ -149,17 +183,17 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4.0,
-    elevation: 5,
+    elevation: 4,
   },
   CloseModalButton:{
-    borderRadius: 80,
-    padding: 6,
+    borderRadius: 50,
+    padding: 4,
     elevation: 2,
     backgroundColor:'red'
   },
   CloseModalText:{
     fontSize:25,
-    fontWeight:'bold',
+    fontWeight:'700',
     color: '#2F73FE',
     textAlign:'center'
   }
