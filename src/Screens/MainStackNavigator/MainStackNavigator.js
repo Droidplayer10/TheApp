@@ -7,6 +7,7 @@ import Registration from '../Registration/Registration';
 import Login from '../Login/Login';
 import Drawer from '../../navigation/Drawer'
 import Jobs from '../Jobs/Jobs';
+import Signature from '../Home/Signature';
 
 
 const Stack = createStackNavigator();
@@ -42,6 +43,11 @@ function MainStackNavigator() {
         <Stack.Screen
         name="Jobs"
         component={Jobs}
+        options={{ headerShown: false }}
+      />
+       <Stack.Screen
+        name="Signature"
+        component={Signature}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

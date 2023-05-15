@@ -1,4 +1,4 @@
-
+import React, { useState,useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,20 +6,13 @@ import {
   Modal,StyleSheet,Image
 } from 'react-native';
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Signature_canvas from 'react-native-signature-canvas';
-import Signature from './Signature'
-import React, { useState } from 'react';
+const ItemView = ({ item, modalVisible, closeModal, openModal, navigation }) => {
+  
+ 
 
-
-
-
-
-
-const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
-  const [signature, setSignature] = useState("");
-  const [showSignatureCanvas, setShowSignatureCanvas] = useState(false);
-
+  const OpenSignature=()=>{
+    navigation.navigate('Signature')
+  }
 
   const formattedStartTime = new Date(item.job_start_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short' });
   const formattedEndTime = new Date(item.job_end_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short' });
@@ -44,9 +37,6 @@ const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
         <Text style={{fontSize:20, fontFamily:'sans-serif-medium'}}>Jelenléti ív</Text>
       </TouchableOpacity>
 
-
-
-
       </View>
       
       
@@ -69,8 +59,16 @@ const ItemView = ({ item, modalVisible, closeModal, openModal }) => {
                 uri:'http://192.168.1.121:3000/'+item.job_attendance_sheet
                 }}  />
  
-<Signature />
 
+ <TouchableOpacity
+                style={styles.CloseModalButton}
+                onPress={OpenSignature}
+              >
+                
+              
+                <Text style={styles.CloseModalText}>Aláírom</Text>
+
+              </TouchableOpacity>
 
 <TouchableOpacity
                 style={styles.CloseModalButton}

@@ -1,0 +1,304 @@
+Szia, ez a Bing. Segítek neked a kódod módosításában. A feladat szerint az aláírást be kell illeszteni a jelenléti ív képébe, és el kell menteni az adatbázisba. Ehhez szükséged lesz egy olyan függvényre, ami képes a képet és az aláírást összefűzni, és egy olyan függvényre, ami képes a képet feltölteni az adatbázisba. A következő kódsorokat módosítottam:
+
+Az ItemView komponensben hozzáadtam egy saveImage függvényt, ami meghívja a mergeImage függvényt és a uploadImage függvényt. A mergeImage függvényt egy külső csomagból importáltam (react-native-image-merge), ami képes két képet összefűzni. A uploadImage függvényt pedig te kell megírnod, hogy hogyan töltsd fel a képet az adatbázisba.
+Az ItemView komponensben hozzáadtam egy state-et, ami tárolja a jelenléti ív képét (attendanceSheet), és frissítettem a modalView-ben az Image komponenst, hogy ezt használja forrásként.
+Az ItemView komponensben átadtam a setSignature függvényt a Signature komponensnek props-ként, hogy lehessen frissíteni az aláírás state-et.
+A Signature komponensben hozzáadtam egy useEffect hook-ot, ami meghívja a props-ban kapott setSignature függvényt, amikor az aláírás változik.
+Csak azokat a kódsorokat írom le, amik változtak:
+
+ItemView komponens:
+
+import React, { useState } from ‘react’; import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, } from ‘react-native’;
+
+import Icon from ‘react-native-vector-icons/MaterialCommunityIcons’; import SignatureCanvas from ‘react-native-signature-canvas’; import Signature from ‘./Signature’; import mergeImage from ‘react-native-image-merge’; // új import
+
+const ItemView = ({ item, modalVisible, closeModal, openModal }) => { const [signature, setSignature] = useState(‘’); const [showSignatureCanvas, setShowSignatureCanvas] = useState(false); const [attendanceSheet, setAttendanceSheet] = useState(‘’); // új state
+
+const formattedStartTime = new Date(item.job_start_time).toLocaleString( ‘hu-HU’, { dateStyle: ‘short’, timeStyle: ‘short’ } ); const formattedEndTime = new Date(item.job_end_time).toLocaleString(‘hu-HU’, { dateStyle: ‘short’, timeStyle: ‘short’, });
+
+// új függvény const saveImage = async () => { try { // összefűzzük a jelenléti ív képét és az aláírást const mergedImage = await mergeImage({ path1: attendanceSheet, path2: signature, quality: 1, }); // feltöltjük az összefűzött képet az adatbázisba await uploadImage(mergedImage); // bezárjuk a modalt closeModal(); } catch (error) { console.error(error); } };
+
+// ezt a függvényt te kell megírd const uploadImage = async (image) => { // itt kell megadnod, hogy hogyan töltsd fel a képet az adatbázisba // például használhatsz egy fetch vagy axios kérést // vagy használhatsz egy külső csomagot, mint a react-native-fs vagy a react-native-fetch-blob // fontos, hogy visszaadj egy promise-t };
+
+return
+
+Fogadott üzenet. Szia, ez a Bing. Segítek neked a kódod módosításában. A feladat szerint az aláírást be kell illeszteni a jelenléti ív képébe, és el kell menteni az adatbázisba. Ehhez szükséged lesz egy olyan függvényre, ami képes a képet és az aláírást összefűzni, és egy olyan függvényre, ami képes a képet feltölteni az adatbázisba. A következő kódsorokat módosítottam: - Az ItemView komponensben hozzáadtam egy saveImage függvényt, ami meghívja a mergeImage függvényt és a uploadImage függvényt. A mergeImage függvényt egy külső csomagból importáltam (react-native-image-merge), ami képes két képet összefűzni. A uploadImage függvényt pedig te kell megírnod, hogy hogyan töltsd fel a képet az adatbázisba. - Az ItemView komponensben hozzáadtam egy state-et, ami tárolja a jelenléti ív képét (attendanceSheet), és frissítettem a modalView-ben az Image komponenst, hogy ezt használja forrásként. - Az ItemView komponensben átadtam a setSignature függvényt a Signature komponensnek props-ként, hogy lehessen frissíteni az aláírás state-et. - A Signature komponensben hozzáadtam egy useEffect hook-ot, ami meghívja a props-ban kapott setSignature függvényt, amikor az aláírás változik. Csak azokat a kódsorokat írom le, amik változtak: ItemView komponens: import React, { useState } from 'react'; import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, } from 'react-native'; import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; import SignatureCanvas from 'react-native-signature-canvas'; import Signature from './Signature'; import mergeImage from 'react-native-image-merge'; // új import const ItemView = ({ item, modalVisible, closeModal, openModal }) => { const [signature, setSignature] = useState(''); const [showSignatureCanvas, setShowSignatureCanvas] = useState(false); const [attendanceSheet, setAttendanceSheet] = useState(''); // új state const formattedStartTime = new Date(item.job_start_time).toLocaleString( 'hu-HU', { dateStyle: 'short', timeStyle: 'short' } ); const formattedEndTime = new Date(item.job_end_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short', }); // új függvény const saveImage = async () => { try { // összefűzzük a jelenléti ív képét és az aláírást const mergedImage = await mergeImage({ path1: attendanceSheet, path2: signature, quality: 1, }); // feltöltjük az összefűzött képet az adatbázisba await uploadImage(mergedImage); // bezárjuk a modalt closeModal(); } catch (error) { console.error(error); } }; // ezt a függvényt te kell megírd const uploadImage = async (image) => { // itt kell megadnod, hogy hogyan töltsd fel a képet az adatbázisba // például használhatsz egy fetch vagy axios kérést // vagy használhatsz egy külső csomagot, mint a react-native-fs vagy a react-native-fetch-blob // fontos, hogy visszaadj egy promise-t }; return (
+2
+/
+20
+
+Tetszik
+Nem tetszik
+MegosztásEgyéb
+Folytasd
+Elküldött üzenet. Folytasd
+Folytatom a kódod módosítását:
+
+<View style={styles.container}>
+  <View style={styles.ItemView}>
+    <Text style={styles.title}>{item.job_name}</Text>
+
+    <Text style={styles.joboftext}>Munkaidő kezdete:</Text>
+    <Text style={styles.joboftext}>{'\t\t\t\t\t' + formattedStartTime}</Text>
+    <Text style={styles.joboftext}>Munkaidő vége: </Text>
+    <Text style={styles.joboftext}>{'\t\t\t\t\t' + formattedEndTime}</Text>
+    <Text style={styles.joboftext}>Helyszín: </Text>
+
+    <Text style={styles.joboftext}>{'\t\t\t\t\t' + item.job_location}</Text>
+    <Text></Text>
+    <TouchableOpacity
+      style={{ alignSelf: 'flex-end' }}
+      onPress={() => {
+        // frissítjük a jelenléti ív képét
+        setAttendanceSheet(
+          'http://192.168.1.121:3000/' + item.job_attendance_sheet
+        );
+        // megnyitjuk a modalt
+        openModal();
+      }}
+    >
+      <Text style={{ fontSize: 20, fontFamily: 'sans-serif-medium' }}>
+        Jelenléti ív
+      </Text>
+    </TouchableOpacity>
+  </View>
+
+  <View style={styles.counter}>
+    <View style={styles.counterBackground} />
+    <Text style={styles.text}>Munka kezdésig:</Text>
+  </View>
+
+  <Modal
+    animationType="slide"
+    transparent={true}
+    visible={modalVisible}
+    onRequestClose={closeModal}
+  >
+    {/* -----MODAL CONTENT------- */}
+
+    <View style={styles.modalView}>
+      {/* itt használjuk az attendanceSheet state-et */}
+      <Image
+        style={styles.tinyLogo}
+        source={{
+          uri: attendanceSheet,
+        }}
+      />
+
+      {/* itt átadjuk a setSignature függvényt props-ként */}
+      <Signature setSignature={setSignature} />
+
+      {/* itt hozzáadjuk a saveImage függvényt a mentés gombhoz */}
+      <TouchableOpacity
+        style={styles.CloseModalButton}
+        onPress={() => {
+          // elmentjük a képet
+          saveImage();
+        }}
+      >
+        <Text style={styles.CloseModalText}>Mentés</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.CloseModalButton}
+        onPress={closeModal}
+      >
+        <Text style={styles.CloseModalText}>X</Text>
+      </TouchableOpacity>
+
+      <View></View>
+    </View>
+  </Modal>
+</View>
+Másolás
+); };
+
+// a többi stílus változatlan
+
+export default ItemView;
+
+Signature komponens:
+
+import React, { useState, useRef, useEffect } from ‘react’; // hozzáadtuk az useEffect hook-ot import { View, Button, StyleSheet, Text } from ‘react-native’; import { requestFrame } from ‘react-native-reanimated/lib/reanimated2/core’; import SignatureCanvas from ‘react-native-signature-canvas’;
+
+const Signature = ({ setSignature }) => { // fogadjuk el props-ként a setSignature függvényt const [signature, setLocalSignature] = useState(‘’);
+
+// hozzáadtuk egy useEffect hook-ot useEffect(() => { // meghívjuk a props-ban kapott setSignature függvényt, amikor az aláírás változik setSignature(signature); }, [signature]);
+
+return ( <SignatureCanvas onOK={(img) => setLocalSignature(img)} // frissítjük a helyi aláírás state-et clearText=“Törlés” confirmText=“Mentés” webStyle={styles.signatureCanvas} /> ); }; const styles = StyleSheet.create({ signatureCanvas: { width: 300, height: 200, backgroundColor: ‘#fff’, marginTop: 10, marginBottom: 10, borderRadius: 10, }, });
+
+export default Signature;
+
+Fogadott üzenet. Folytatom a kódod módosítását: <View style={styles.container}> <View style={styles.ItemView}> <Text style={styles.title}>{item.job_name}</Text> <Text style={styles.joboftext}>Munkaidő kezdete:</Text> <Text style={styles.joboftext}>{'\t\t\t\t\t' + formattedStartTime}</Text> <Text style={styles.joboftext}>Munkaidő vége: </Text> <Text style={styles.joboftext}>{'\t\t\t\t\t' + formattedEndTime}</Text> <Text style={styles.joboftext}>Helyszín: </Text> <Text style={styles.joboftext}>{'\t\t\t\t\t' + item.job_location}</Text> <Text></Text> <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => { // frissítjük a jelenléti ív képét setAttendanceSheet( 'http://192.168.1.121:3000/' + item.job_attendance_sheet ); // megnyitjuk a modalt openModal(); }} > <Text style={{ fontSize: 20, fontFamily: 'sans-serif-medium' }}> Jelenléti ív </Text> </TouchableOpacity> </View> <View style={styles.counter}> <View style={styles.counterBackground} /> <Text style={styles.text}>Munka kezdésig:</Text> </View> <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={closeModal} > {/* -----MODAL CONTENT------- */} <View style={styles.modalView}> {/* itt használjuk az attendanceSheet state-et */} <Image style={styles.tinyLogo} source={{ uri: attendanceSheet, }} /> {/* itt átadjuk a setSignature függvényt props-ként */} <Signature setSignature={setSignature} /> {/* itt hozzáadjuk a saveImage függvényt a mentés gombhoz */} <TouchableOpacity style={styles.CloseModalButton} onPress={() => { // elmentjük a képet saveImage(); }} > <Text style={styles.CloseModalText}>Mentés</Text> </TouchableOpacity> <TouchableOpacity style={styles.CloseModalButton} onPress={closeModal} > <Text style={styles.CloseModalText}>X</Text> </TouchableOpacity> <View></View> </View> </Modal> </View> ); }; // a többi stílus változatlan export default ItemView; Signature komponens: import React, { useState, useRef, useEffect } from 'react'; // hozzáadtuk az useEffect hook-ot import { View, Button, StyleSheet, Text } from 'react-native'; import { requestFrame } from 'react-native-reanimated/lib/reanimated2/core'; import SignatureCanvas from 'react-native-signature-canvas'; const Signature = ({ setSignature }) => { // fogadjuk el props-ként a setSignature függvényt const [signature, setLocalSignature] = useState(''); // hozzáadtuk egy useEffect hook-ot useEffect(() => { // meghívjuk a props-ban kapott setSignature függvényt, amikor az aláírás változik setSignature(signature); }, [signature]); return ( <SignatureCanvas onOK={(img) => setLocalSignature(img)} // frissítjük a helyi aláírás state-et clearText="Törlés" confirmText="Mentés" webStyle={styles.signatureCanvas} /> ); }; const styles = StyleSheet.create({ signatureCanvas: { width: 300, height: 200, backgroundColor: '#fff', marginTop: 10, marginBottom: 10, borderRadius: 10, }, }); export default Signature;
+3
+/
+20
+Azt akarom, hogy az aláírás a jelenléti íven lévő megadott nap mellé lévő mezőbe tegye az aláírást
+Elküldött üzenet. Azt akarom, hogy az aláírás a jelenléti íven lévő megadott nap mellé lévő mezőbe tegye az aláírást
+Értem. Ehhez szükséged lesz egy olyan függvényre, ami képes meghatározni a mező pozícióját a jelenléti ív képén. Ezt a függvényt te kell megírd, mert én nem tudom, hogy hogyan néz ki a jelenléti ív. A függvénynek vissza kell adnia egy objektumot, ami tartalmazza a mező x és y koordinátáit, valamint a szélességét és magasságát. Például:
+
+const getFieldPosition = (day) => { // itt kell megadnod, hogy hogyan számold ki a mező pozícióját // például használhatsz egy switch vagy if-else szerkezetet // vagy használhatsz egy külső csomagot, mint a react-native-image-crop-picker // fontos, hogy visszaadj egy objektumot, ami tartalmazza az x, y, width és height tulajdonságokat };
+
+Ezután ezt a függvényt használhatod a mergeImage függvényben, hogy megadd az aláírás pozícióját. Például:
+
+const saveImage = async () => { try { // kiválasztjuk a megfelelő napot const day = “2021-05-11”; // ezt te kell megadd // meghatározzuk a mező pozícióját const fieldPosition = getFieldPosition(day); // összefűzzük a jelenléti ív képét és az aláírást const mergedImage = await mergeImage({ path1: attendanceSheet, path2: signature, quality: 1, positionX: fieldPosition.x, // itt adjuk meg az aláírás x koordinátáját positionY: fieldPosition.y, // itt adjuk meg az aláírás y koordinátáját width: fieldPosition.width, // itt adjuk meg az aláírás szélességét height: fieldPosition.height // itt adjuk meg az aláírás magasságét }); // feltöltjük az összefűzött képet az adatbázisba await uploadImage(mergedImage); // bezárjuk a modalt closeModal(); } catch (error) { console.error(error); } };
+
+Fogadott üzenet. Értem. Ehhez szükséged lesz egy olyan függvényre, ami képes meghatározni a mező pozícióját a jelenléti ív képén. Ezt a függvényt te kell megírd, mert én nem tudom, hogy hogyan néz ki a jelenléti ív. A függvénynek vissza kell adnia egy objektumot, ami tartalmazza a mező x és y koordinátáit, valamint a szélességét és magasságát. Például: const getFieldPosition = (day) => { // itt kell megadnod, hogy hogyan számold ki a mező pozícióját // például használhatsz egy switch vagy if-else szerkezetet // vagy használhatsz egy külső csomagot, mint a react-native-image-crop-picker // fontos, hogy visszaadj egy objektumot, ami tartalmazza az x, y, width és height tulajdonságokat }; Ezután ezt a függvényt használhatod a mergeImage függvényben, hogy megadd az aláírás pozícióját. Például: const saveImage = async () => { try { // kiválasztjuk a megfelelő napot const day = "2021-05-11"; // ezt te kell megadd // meghatározzuk a mező pozícióját const fieldPosition = getFieldPosition(day); // összefűzzük a jelenléti ív képét és az aláírást const mergedImage = await mergeImage({ path1: attendanceSheet, path2: signature, quality: 1, positionX: fieldPosition.x, // itt adjuk meg az aláírás x koordinátáját positionY: fieldPosition.y, // itt adjuk meg az aláírás y koordinátáját width: fieldPosition.width, // itt adjuk meg az aláírás szélességét height: fieldPosition.height // itt adjuk meg az aláírás magasságét }); // feltöltjük az összefűzött képet az adatbázisba await uploadImage(mergedImage); // bezárjuk a modalt closeModal(); } catch (error) { console.error(error); } };
+4
+/
+20
+Most foglald össze, hogy amit írtál kódot, az mit csinál és írd le a kódot újra, átlátható módon
+Elküldött üzenet. Most foglald össze, hogy amit írtál kódot, az mit csinál és írd le a kódot újra, átlátható módon
+A kódod célja az, hogy lehetővé tegye a diákoknak, hogy aláírják a jelenléti ívüket egy alkalmazásban. Ehhez a következő lépéseket kell végrehajtani:
+
+Megjeleníteni egy listát a diákok munkáiról, amiket elvégeztek.
+Megnyitni egy modalt, amikor a diák rákattint a jelenléti ív gombra.
+Megjeleníteni a jelenléti ív képét és egy aláíró felületet a modalban.
+Menteni az aláírást és beilleszteni a jelenléti ív képébe a megfelelő mezőbe.
+Feltölteni az összefűzött képet az adatbázisba.
+A kódod így néz ki:
+
+// importáljuk a szükséges modulokat import React, { useState } from ‘react’; import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, } from ‘react-native’;
+
+import Icon from ‘react-native-vector-icons/MaterialCommunityIcons’; import SignatureCanvas from ‘react-native-signature-canvas’; import Signature from ‘./Signature’; import mergeImage from ‘react-native-image-merge’;
+
+// definiáljuk az ItemView komponenst const ItemView = ({ item, modalVisible, closeModal, openModal }) => { // használunk néhány state-et const [signature, setSignature] = useState(‘’); const [showSignatureCanvas, setShowSignatureCanvas] = useState(false); const [attendanceSheet, setAttendanceSheet] = useState(‘’);
+
+// formázzuk a munkaidő kezdését és végét const formattedStartTime = new Date(item.job_start_time).toLocaleString( ‘hu-HU’, { dateStyle: ‘short’, timeStyle: ‘short’ } ); const formattedEndTime = new Date(item.job_end_time).toLocaleString(‘hu-HU’, { dateStyle: ‘short’, timeStyle: ‘short’, });
+
+// definiáljuk a saveImage függvényt const saveImage = async () => { try { // kiválasztjuk a megfelelő napot const day = “2021-05-11”; // ezt te kell megadd // meghatározzuk a mező pozícióját const fieldPosition = getFieldPosition(day); // összefűzzük a jelenléti ív képét és az aláírást const mergedImage = await mergeImage({ path1: attendanceSheet, path2: signature, quality: 1, positionX: fieldPosition.x, positionY: fieldPosition.y, width: fieldPosition.width, height: fieldPosition.height }); // feltöltjük az összefűzött képet az adatbázisba await uploadImage(mergedImage); // bezárjuk a modalt closeModal(); } catch (error) { console.error(error); } };
+
+// definiáljuk a uploadImage függvényt const uploadImage = async (image) => { // itt kell megadnod, hogy hogyan töltsd fel a képet az adatbázisba // például használhatsz egy fetch vagy axios kérést // vagy használhatsz egy külső csomagot, mint a react-native-fs vagy a react-native-fetch-blob // fontos, hogy visszaadj egy promise-t };
+
+// definiáljuk a getFieldPosition függvényt const getFieldPosition = (day) => { // itt kell megadnod, hogy hogyan számold ki a mező pozícióját // például használhatsz egy switch vagy if-else szerkezetet // vagy használhatsz egy külső csomagot, mint a react-native-image-crop-picker // fontos, hogy
+
+Fogadott üzenet. A kódod célja az, hogy lehetővé tegye a diákoknak, hogy aláírják a jelenléti ívüket egy alkalmazásban. Ehhez a következő lépéseket kell végrehajtani: - Megjeleníteni egy listát a diákok munkáiról, amiket elvégeztek. - Megnyitni egy modalt, amikor a diák rákattint a jelenléti ív gombra. - Megjeleníteni a jelenléti ív képét és egy aláíró felületet a modalban. - Menteni az aláírást és beilleszteni a jelenléti ív képébe a megfelelő mezőbe. - Feltölteni az összefűzött képet az adatbázisba. A kódod így néz ki: // importáljuk a szükséges modulokat import React, { useState } from 'react'; import { View, Text, TouchableOpacity, Modal, StyleSheet, Image, } from 'react-native'; import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; import SignatureCanvas from 'react-native-signature-canvas'; import Signature from './Signature'; import mergeImage from 'react-native-image-merge'; // definiáljuk az ItemView komponenst const ItemView = ({ item, modalVisible, closeModal, openModal }) => { // használunk néhány state-et const [signature, setSignature] = useState(''); const [showSignatureCanvas, setShowSignatureCanvas] = useState(false); const [attendanceSheet, setAttendanceSheet] = useState(''); // formázzuk a munkaidő kezdését és végét const formattedStartTime = new Date(item.job_start_time).toLocaleString( 'hu-HU', { dateStyle: 'short', timeStyle: 'short' } ); const formattedEndTime = new Date(item.job_end_time).toLocaleString('hu-HU', { dateStyle: 'short', timeStyle: 'short', }); // definiáljuk a saveImage függvényt const saveImage = async () => { try { // kiválasztjuk a megfelelő napot const day = "2021-05-11"; // ezt te kell megadd // meghatározzuk a mező pozícióját const fieldPosition = getFieldPosition(day); // összefűzzük a jelenléti ív képét és az aláírást const mergedImage = await mergeImage({ path1: attendanceSheet, path2: signature, quality: 1, positionX: fieldPosition.x, positionY: fieldPosition.y, width: fieldPosition.width, height: fieldPosition.height }); // feltöltjük az összefűzött képet az adatbázisba await uploadImage(mergedImage); // bezárjuk a modalt closeModal(); } catch (error) { console.error(error); } }; // definiáljuk a uploadImage függvényt const uploadImage = async (image) => { // itt kell megadnod, hogy hogyan töltsd fel a képet az adatbázisba // például használhatsz egy fetch vagy axios kérést // vagy használhatsz egy külső csomagot, mint a react-native-fs vagy a react-native-fetch-blob // fontos, hogy visszaadj egy promise-t }; // definiáljuk a getFieldPosition függvényt const getFieldPosition = (day) => { // itt kell megadnod, hogy hogyan számold ki a mező pozícióját // például használhatsz egy switch vagy if-else szerkezetet // vagy használhatsz egy külső csomagot, mint a react-native-image-crop-picker // fontos, hogy
+5
+/
+20
+Fejezd be a mondanivalód
+Elküldött üzenet. Fejezd be a mondanivalód
+Bocsánat, nem fejeztem be a mondatot. A getFieldPosition függvénynek fontos, hogy visszaadj egy objektumot, ami tartalmazza az x, y, width és height tulajdonságokat.
+
+A kódod folytatása:
+
+// visszaadjuk a mező pozícióját
+return {
+  x: ...,
+  y: ...,
+  width: ...,
+  height: ...
+};
+Másolás
+};
+
+// visszaadjuk a komponens JSX kódját return ( <View style={styles.container}> <View style={styles.ItemView}> <Text style={styles.title}>{item.job_name}</Text>
+
+    <Text style={styles.joboftext}>Munkaidő kezdete:</Text>
+    <Text style={styles.joboftext}>{'\t\t\t\t\t' + formattedStartTime}</Text>
+    <Text style={styles.joboftext}>Munkaidő vége: </Text>
+    <Text style={styles.joboftext}>{'\t\t\t\t\t' + formattedEndTime}</Text>
+    <Text style={styles.joboftext}>Helyszín: </Text>
+
+    <Text style={styles.joboftext}>{'\t\t\t\t\t' + item.job_location}</Text>
+    <Text></Text>
+    <TouchableOpacity
+      style={{ alignSelf: 'flex-end' }}
+      onPress={() => {
+        // frissítjük a jelenléti ív képét
+        setAttendanceSheet(
+          'http://192.168.1.121:3000/' + item.job_attendance_sheet
+        );
+        // megnyitjuk a modalt
+        openModal();
+      }}
+    >
+      <Text style={{ fontSize: 20, fontFamily: 'sans-serif-medium' }}>
+        Jelenléti ív
+      </Text>
+    </TouchableOpacity>
+  </View>
+
+  <View style={styles.counter}>
+    <View style={styles.counterBackground} />
+    <Text style={styles.text}>Munka kezdésig:</Text>
+  </View>
+
+  <Modal
+    animationType="slide"
+    transparent={true}
+    visible={modalVisible}
+    onRequestClose={closeModal}
+  >
+    {/* -----MODAL CONTENT------- */}
+
+    <View style={styles.modalView}>
+      {/* itt használjuk az attendanceSheet state-et */}
+      <Image
+        style={styles.tinyLogo}
+        source={{
+          uri: attendanceSheet,
+        }}
+      />
+
+      {/* itt átadjuk a setSignature függvényt props-ként */}
+      <Signature setSignature={setSignature} />
+
+      {/* itt hozzáadjuk a saveImage függvényt a mentés gombhoz */}
+      <TouchableOpacity
+        style={styles.CloseModalButton}
+        onPress={() => {
+          // elmentjük a képet
+          saveImage();
+        }}
+      >
+        <Text style={styles.CloseModalText}>Mentés</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.CloseModalButton}
+        onPress={closeModal}
+      >
+        <Text style={styles.CloseModalText}>X</Text>
+      </TouchableOpacity>
+
+      <View></View>
+    </View>
+  </Modal>
+</View>
+Másolás
+); };
+
+// definiáljuk a stílusokat const styles = StyleSheet.create({ container: { flex: 1, justifyContent: ‘center’, alignItems: ‘center’, }, ItemView: { alignItems: ‘flex-start’, backgroundColor: ‘#2F73FE’, width: ‘95%’,
+
+borderRadius: 30,
+paddingVertical: '10%',
+paddingHorizontal: '5%',
+Másolás
+}, tinyLogo: { width: ‘100%’, height: ‘70%’, resizeMode: ‘stretch’, }, counter: { justifyContent: ‘center’, backgroundColor: ‘#fff’, borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: ‘flex-start’, width: ‘80%’, height: ‘12%’, position: ‘absolute’, bottom: 0, overflow: ‘hidden’, paddingBottom: 0, backgroundImage: ‘linear-gradient(to bottom, transparent 0%, #fff 100%)’, }, counterBackground: { position: ‘absolute’, bottom: 0, left:
+
+Fogadott üzenet. Bocsánat, nem fejeztem be a mondatot. A getFieldPosition függvénynek fontos, hogy visszaadj egy objektumot, ami tartalmazza az x, y, width és height tulajdonságokat. A kódod folytatása: // visszaadjuk a mező pozícióját return { x: ..., y: ..., width: ..., height: ... }; }; // visszaadjuk a komponens JSX kódját return ( <View style={styles.container}> <View style={styles.ItemView}> <Text style={styles.title}>{item.job_name}</Text> <Text style={styles.joboftext}>Munkaidő kezdete:</Text> <Text style={styles.joboftext}>{'\t\t\t\t\t' + formattedStartTime}</Text> <Text style={styles.joboftext}>Munkaidő vége: </Text> <Text style={styles.joboftext}>{'\t\t\t\t\t' + formattedEndTime}</Text> <Text style={styles.joboftext}>Helyszín: </Text> <Text style={styles.joboftext}>{'\t\t\t\t\t' + item.job_location}</Text> <Text></Text> <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => { // frissítjük a jelenléti ív képét setAttendanceSheet( 'http://192.168.1.121:3000/' + item.job_attendance_sheet ); // megnyitjuk a modalt openModal(); }} > <Text style={{ fontSize: 20, fontFamily: 'sans-serif-medium' }}> Jelenléti ív </Text> </TouchableOpacity> </View> <View style={styles.counter}> <View style={styles.counterBackground} /> <Text style={styles.text}>Munka kezdésig:</Text> </View> <Modal animationType="slide" transparent={true} visible={modalVisible} onRequestClose={closeModal} > {/* -----MODAL CONTENT------- */} <View style={styles.modalView}> {/* itt használjuk az attendanceSheet state-et */} <Image style={styles.tinyLogo} source={{ uri: attendanceSheet, }} /> {/* itt átadjuk a setSignature függvényt props-ként */} <Signature setSignature={setSignature} /> {/* itt hozzáadjuk a saveImage függvényt a mentés gombhoz */} <TouchableOpacity style={styles.CloseModalButton} onPress={() => { // elmentjük a képet saveImage(); }} > <Text style={styles.CloseModalText}>Mentés</Text> </TouchableOpacity> <TouchableOpacity style={styles.CloseModalButton} onPress={closeModal} > <Text style={styles.CloseModalText}>X</Text> </TouchableOpacity> <View></View> </View> </Modal> </View> ); }; // definiáljuk a stílusokat const styles = StyleSheet.create({ container: { flex: 1, justifyContent: 'center', alignItems: 'center', }, ItemView: { alignItems: 'flex-start', backgroundColor: '#2F73FE', width: '95%', borderRadius: 30, paddingVertical: '10%', paddingHorizontal: '5%', }, tinyLogo: { width: '100%', height: '70%', resizeMode: 'stretch', }, counter: { justifyContent: 'center', backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'flex-start', width: '80%', height: '12%', position: 'absolute', bottom: 0, overflow: 'hidden', paddingBottom: 0, backgroundImage: 'linear-gradient(to bottom, transparent 0%, #fff 100%)', }, counterBackground: { position: 'absolute', bottom: 0, left:
+6
+/
+20
+Annyit változtassunk még, hogy mikor beilleszti az aláírást készítsen másolatot a képről, és a másolatra tegye rá az aláírást, és azt mentse az adatbázisba, vagyis a lemezre
+Elküldött üzenet. Annyit változtassunk még, hogy mikor beilleszti az aláírást készítsen másolatot a képről, és a másolatra tegye rá az aláírást, és azt mentse az adatbázisba, vagyis a lemezre
+Értem. Ehhez szükséged lesz egy olyan függvényre, ami képes másolatot készíteni a képről. Ezt a függvényt te kell megírd, mert én nem tudom, hogy hogyan tárold a képeket a lemezen. A függvénynek vissza kell adnia az új kép elérési útját. Például:
+
+const copyImage = async (image) => { // itt kell megadnod, hogy hogyan készíts másolatot a képről // például használhatsz egy külső csomagot, mint a react-native-fs vagy a react-native-fetch-blob // fontos, hogy visszaadj egy promise-t, ami tartalmazza az új kép elérési útját };
+
+Ezután ezt a függvényt használhatod a saveImage függvényben, hogy megadd az aláírás forrását. Például:
+
+const saveImage = async () => { try { // kiválasztjuk a megfelelő napot const day = “2021-05-11”; // ezt te kell megadd // meghatározzuk a mező pozícióját const fieldPosition = getFieldPosition(day); // készítünk egy másolatot a jelenléti ív képéről const copiedImage = await copyImage(attendanceSheet); // összefűzzük a másolt képet és az aláírást const mergedImage = await mergeImage({ path1: copiedImage, // itt használjuk az új képet path2: signature, quality: 1, positionX: fieldPosition.x, positionY: fieldPosition.y, width: fieldPosition.width, height: fieldPosition.height }); // feltöltjük az összefűzött képet az adatbázisba await uploadImage(mergedImage); // bezárjuk a modalt closeModal(); } catch (error) { console.error(error); } };
+
+Fogadott üzenet. Értem. Ehhez szükséged lesz egy olyan függvényre, ami képes másolatot készíteni a képről. Ezt a függvényt te kell megírd, mert én nem tudom, hogy hogyan tárold a képeket a lemezen. A függvénynek vissza kell adnia az új kép elérési útját. Például: const copyImage = async (image) => { // itt kell megadnod, hogy hogyan készíts másolatot a képről // például használhatsz egy külső csomagot, mint a react-native-fs vagy a react-native-fetch-blob // fontos, hogy visszaadj egy promise-t, ami tartalmazza az új kép elérési útját }; Ezután ezt a függvényt használhatod a saveImage függvényben, hogy megadd az aláírás forrását. Például: const saveImage = async () => { try { // kiválasztjuk a megfelelő napot const day = "2021-05-11"; // ezt te kell megadd // meghatározzuk a mező pozícióját const fieldPosition = getFieldPosition(day); // készítünk egy másolatot a jelenléti ív képéről const copiedImage = await copyImage(attendanceSheet); // összefűzzük a másolt képet és az aláírást const mergedImage = await mergeImage({ path1: copiedImage, // itt használjuk az új képet path2: signature, quality: 1, positionX: fieldPosition.x, positionY: fieldPosition.y, width: fieldPosition.width, height: fieldPosition.height }); // feltöltjük az összefűzött képet az adatbázisba await uploadImage(mergedImage); // bezárjuk a modalt closeModal(); } catch (error) { console.error(error); } };
+7
+/
+20
+Nem fejezted be.
+Elküldött üzenet. Nem fejezted be.
+Bocsánat, nem fejeztem be a kódot. A kódod folytatása:
+
+// a többi rész változatlan export default ItemView;
+
+// definiáljuk a stílusokat const styles = StyleSheet.create({ // a stílusok változatlanok });

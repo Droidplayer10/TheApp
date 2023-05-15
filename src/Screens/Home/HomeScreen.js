@@ -5,7 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 import ItemView from './ItemView';
 
-const Home=()=> {
+const Home=({navigation})=> {
   
   const [ jobsofStudent, setJobsofStudent] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,6 +27,7 @@ const Home=()=> {
       console.log(error)
     })
   },[])
+  
 
 const ItemSeparatorView = () => {
   return (
@@ -70,6 +71,8 @@ const openModal = (studentId) => {
             setActiveModalId={setActiveModalId}
             closeModal={closeModal}
             openModal={() => openModal(item.attendance_student_id)}
+            navigation={navigation} 
+
           />}
       />
 
